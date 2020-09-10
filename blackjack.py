@@ -45,7 +45,7 @@ class Player:
         # Checking if bet places is numeric and therefore valid
         while bet.isnumeric() == False:
 
-            bet = input("Invalid bet, try again...")
+            bet = input("Invalid bet, try again: ")
 
             if bet.isnumeric() == True:
                 break
@@ -123,6 +123,7 @@ while game_on:
         new_dealer.hit(new_deck.deal_one())
 
     print("\n\n")
+    print('(Ctrl + C to stop playing)')
     print("New Round...")
     print(f"Bankroll: ${new_player.bankroll}")
     bet = new_player.place_bet()
@@ -193,13 +194,22 @@ while game_on:
                 break
 
     # Dealer Turn Loop
+
     while dealer_turn:
         print("\n--- Dealer's Turn ---")
 
         dealer_hand_values = []
         for x in new_dealer.hand:
             dealer_hand_values.append(values[x.rank])
+
         dealer_hand_sum = sum(dealer_hand_values)
+
+        # Check for Ace and adjust dealer_hand_sum
+        if dealer_hand_sum > 21 and 11 in dealer_hand_values:
+
+            ace_count = dealer_hand_values.count(11)
+            dealer_hand_sum -= 10*ace_count
+
 
         # Dealer keeps receing new cards until dealer_hand_sum < 17
         if dealer_hand_sum < 17:
@@ -219,10 +229,6 @@ while game_on:
         
         print("\n---Dealer hand --- ")
         new_dealer.show_hand()
-        
-        # Check for Ace and adjust dealer_hand_sum
-        if dealer_hand_sum > 21 and 11 in dealer_hand_values:
-            dealer_hand_sum -= 10
 
         if dealer_hand_sum == 21:
             print("\n\n")
@@ -242,10 +248,6 @@ while game_on:
         if dealer_hand_sum >= 17:
             round_not_over = True
             dealer_turn = False
-        
-        # Check for Ace and adjust dealer_hand_sum
-        if dealer_hand_sum > 21 and 11 in dealer_hand_values:
-            dealer_hand_sum -= 10
     
     # Final check to determine round winner...
     if round_not_over == True:
